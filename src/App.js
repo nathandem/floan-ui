@@ -1,6 +1,9 @@
 import React from 'react';
 import { ethers } from "ethers";
 
+import Landing from './Landing';
+import FLoan from './floan/FLoan';
+
 import './App.css';
 
 
@@ -47,19 +50,10 @@ export default class App extends React.PureComponent {
         return (
             <div className="App__container">
                 {!this.state.signer ?
-                    <button onClick={this.connectWallet}>Connect wallet</button> :
-                    <span>You are logged-in as {this.state.signedAddress}</span>
+                    <Landing connectWallet={this.connectWallet} /> :
+                    <FLoan {...this.state} />
                 }
             </div>
         );
     }
 }
-
-// IN FLOAN COMPONENT
-// ------------------
-// ethers.Contract can be instantiated with both a provider or a signer as the 3rd argument
-// if it's a provider, the contract is limited to read-only actions
-// with a signer, the contract can write
-// const contract = new ethers.Contract(TOKEN_ADDRESS, Token.abi, signer);
-
-// console.log(await provider.getBlockNumber());
