@@ -12,7 +12,7 @@ export default function Home({ signedAddress, goToCreateLoanView, goToListLoansV
             <h3>You are logged-in as {signedAddress}</h3>
 
             <Button variant="outlined" onClick={goToCreateLoanView}>Create loan request</Button>
-            <Button variant="outlined" onClick={goToListLoansView}>Create loan request</Button>
+            <Button variant="outlined" onClick={goToListLoansView}>View open loans</Button>
         </div>
     );
 }

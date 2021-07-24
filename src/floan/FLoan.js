@@ -5,7 +5,10 @@ import { ethers } from "ethers";
 import FloanContract from '../abis/Floan.json';
 
 import CreateLoan from './CreateLoan';
+import OpenLoanList from './OpenLoanList';
 import Home from './Home';
+
+import { getLoans } from '../helpers/theGraph';
 
 
 const VIEWS = {
@@ -19,6 +22,7 @@ export default class FLoan extends React.PureComponent {
     state = {
         contract: null,
         activeView: VIEWS.HOME,
+        loans: [],
     };
 
     componentDidMount = async () => {
@@ -32,8 +36,9 @@ export default class FLoan extends React.PureComponent {
         this.setState({ activeView: VIEWS.CREATE_LOAN });
     }
 
-    goToListLoansView = () => {
-        this.setState({ activeView: VIEWS.LIST_LOANS });
+    goToListLoansView = async () => {
+        const loans = await getLoans();
+        this.setState({ activeView: VIEWS.LIST_LOANS, loans });
     }
 
     goToHomeView = () => {
@@ -72,9 +77,9 @@ export default class FLoan extends React.PureComponent {
                 createLoanOffer={this.createLoanOffer}
             />;
         } else if (this.state.activeView === VIEWS.LIST_LOANS) {
-            activeView = <ListLoans
+            activeView = <OpenLoanList
                 goToHomeView={this.goToHomeView}
-                loans={loans}
+                openLoans={this.state.loans.filter(loan => loan.state === 'OPEN')}
             />;
         }
 
