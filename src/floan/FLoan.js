@@ -54,8 +54,8 @@ export default class FLoan extends React.PureComponent {
 
     // interactions with the smart contracts
 
-    createLoanOffer = async (principal, repayment, duration, ttl) => {
-        const transaction = await this.state.floanContract.requestLoan(principal, repayment, duration, ttl);
+    createLoanOffer = async (principal, repayment, duration) => {
+        const transaction = await this.state.floanContract.requestLoan(principal, repayment, duration);
         console.log(transaction);
 
         alert('Loan properly created!');

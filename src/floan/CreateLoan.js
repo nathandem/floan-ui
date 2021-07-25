@@ -13,16 +13,14 @@ export default class CreateLoan extends React.PureComponent {
         principal: '',
         repayment: '',
         duration: '',
-        ttl: '',
     };
 
     prepCreateLoanOffer = () => {
         const principal = parseInt(this.state.principal, 10);
         const repayment = parseInt(this.state.repayment, 10);
         const duration = parseInt(this.state.duration, 10) * 24 * 60 * 60;
-        const ttl = parseInt(this.state.ttl, 10) * 24 * 60 * 60;
 
-        this.props.createLoanOffer(principal, repayment, duration, ttl);
+        this.props.createLoanOffer(principal, repayment, duration);
     }
 
     render() {
@@ -53,15 +51,6 @@ export default class CreateLoan extends React.PureComponent {
                             value={this.state.duration}
                             onChange={(e) => this.setState({ duration: e.target.value })}
                             label="Duration (days)"
-                            variant="outlined"
-                            fullWidth
-                        />
-                    </div>
-                    <div className="CreateLoan__input">
-                        <TextField
-                            value={this.state.ttl}
-                            onChange={(e) => this.setState({ ttl: e.target.value })}
-                            label="Loan offer TTL (days)"
                             variant="outlined"
                             fullWidth
                         />
