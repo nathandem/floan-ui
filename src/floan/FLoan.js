@@ -90,10 +90,16 @@ export default class FLoan extends React.PureComponent {
 
         const w = await this.state.floanContract.provideLoan(loanId);
         console.log(w);
+
+        alert(`You successfully funded loan: ${loanId}`);
+        this.goToListLoansView();
     }
 
     paybackLoan = async (loanId) => {
         console.log(await this.state.floanContract.paybackLoan(loanId));
+
+        alert(`You successfully payed back loan: ${loanId}`);
+        this.goToRequesterOpenLoansView();
     }
 
     render() {
