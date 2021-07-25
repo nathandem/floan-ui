@@ -17,12 +17,12 @@ export default function RequesterInfo({ goToHomeView, requesterInfo }) {
           Home
         </Button>
 
-        <div>Requester address: {requesterInfo.id}</div>
-        <div>Amount outstanding: {etherToFixed(requesterInfo.amountOutstanding)}</div>
-        <div>Amount repayed: {etherToFixed(requesterInfo.amountRepayed)}</div>
-        <div>Amount requested: {etherToFixed(requesterInfo.amountRequested)}</div>
-        <div>Amount overdue: {etherToFixed(requesterInfo.amountOverdue)}</div>
-        <div>
+        <div className="Centered__line">Requester address: {requesterInfo.id}</div>
+        <div className="Centered__line">Amount outstanding: {etherToFixed(requesterInfo.amountOutstanding)}</div>
+        <div className="Centered__line">Amount repayed: {etherToFixed(requesterInfo.amountRepayed)}</div>
+        <div className="Centered__line">Amount requested: {etherToFixed(requesterInfo.amountRequested)}</div>
+        <div className="Centered__line">Amount overdue: {etherToFixed(requesterInfo.amountOverdue)}</div>
+        <div className="Centered__line">
           <a
             href={`https://app-kovan.poh.dev/profile/${requesterInfo.id}`}
             target="_blank"

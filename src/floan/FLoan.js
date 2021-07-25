@@ -99,21 +99,21 @@ export default class FLoan extends React.PureComponent {
         console.log(w);
 
         alert(`You successfully funded loan: ${loanId}`);
-        this.goToListLoansView();
+        this.goToHomeView();
     }
 
     drawLoan = async (loanId) => {
         console.log(await this.state.floanContract.drawLoan(loanId));
 
         alert(`You received the funds from the load: ${loanId}`);
-        this.goToRequesterProvidedLoansView();
+        this.goToHomeView();
     }
 
     paybackLoan = async (loanId) => {
         console.log(await this.state.floanContract.paybackLoan(loanId));
 
         alert(`You successfully payed back loan: ${loanId}`);
-        this.goToRequesterDrawnLoansView();
+        this.goToHomeView();
     }
 
     render() {
