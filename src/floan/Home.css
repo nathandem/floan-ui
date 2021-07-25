@@ -5,3 +5,9 @@
 
     height: 100vh;
 }
+
+.Home__button {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 1rem;
+}
