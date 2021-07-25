@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { ethers } from "ethers";
 
-import FloanContract from '../abis/Floan.json';
+import floanAbi from '../abis/floan.json';
+import erc20Abi from '../abis/erc20.json';
 
 import CreateLoan from './CreateLoan';
 import OpenLoanList from './OpenLoanList';
@@ -20,14 +21,20 @@ const VIEWS = {
 export default class FLoan extends React.PureComponent {
 
     state = {
-        contract: null,
+        floanContract: null,  // ethers.js Contract entity for floan
+        daiContract: null,  // ethers.js Contract entity for dai
         activeView: VIEWS.HOME,
         loans: [],
     };
 
     componentDidMount = async () => {
-        const contract = new ethers.Contract(process.env.REACT_APP_TOKEN_ADDRESS, FloanContract.abi, this.props.signer);
-        this.setState({ contract });
+        const floanContract = new ethers.Contract(process.env.REACT_APP_FLOAN_ADDRESS, floanAbi, this.props.signer);
+
+        // Get DAI ERC20 address
+        const daiAddress = await floanContract.getTokenAddress();
+        const daiContract = new ethers.Contract(daiAddress, erc20Abi, this.props.signer);
+
+        this.setState({ daiContract, floanContract });
     }
 
     // change view
@@ -45,22 +52,26 @@ export default class FLoan extends React.PureComponent {
         this.setState({ activeView: VIEWS.HOME });
     }
 
-    // interactions with the smart contract
+    // interactions with the smart contracts
 
     createLoanOffer = async (principal, repayment, duration, ttl) => {
-        const transaction = await this.state.contract.requestLoan(principal, repayment, duration, ttl);
+        const transaction = await this.state.floanContract.requestLoan(principal, repayment, duration, ttl);
         console.log(transaction);
 
         alert('Loan properly created!');
         this.goToHomeView();
     }
 
-    createLoanOffer = async (principal, repayment, duration, ttl) => {
-        const transaction = await this.state.contract.requestLoan(principal, repayment, duration, ttl);
-        console.log(transaction);
+    fundLoad = async (loanId) => {
+        // TODO: fix `getCredit` call
+        // const loadPrincipal = await this.state.floanContract.getCredit(loanId).principal;
+        const loadPrincipal = ethers.utils.parseEther('1000');
 
-        alert('Loan properly created!');
-        this.goToHomeView();
+        const v = await this.state.daiContract.approve(process.env.REACT_APP_FLOAN_ADDRESS, loadPrincipal);
+        console.log(v);
+
+        const w = await this.state.floanContract.provideLoan(loanId);
+        console.log(w);
     }
 
     render() {
@@ -80,14 +91,13 @@ export default class FLoan extends React.PureComponent {
             activeView = <OpenLoanList
                 goToHomeView={this.goToHomeView}
                 openLoans={this.state.loans.filter(loan => loan.state === 'OPEN')}
+                fundLoad={this.fundLoad}
             />;
         }
 
         return (
             <div>
                 {activeView}
-                {/* <button onClick={this.getTokenAddress}>Get Token Address</button>
-                <button onClick={this.createHardcodedLoanOffer}>Create Hard Coded Loan Offer</button> */}
             </div>
         );
     }

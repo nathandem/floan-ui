@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { utils } from "ethers";
 
@@ -11,32 +10,36 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
 
+import PaymentIcon from '@material-ui/icons/Payment';
 
-export default class OpenLoanList extends React.PureComponent {
+import './Table.css';
 
-    state = {
-        amountToLend: '',
-    };
 
-    render() {
-        const rows = this.props.openLoans.map(loan => {
-            return (
-                <TableRow key={loan.id}>
-                    <TableCell>{loan.id}</TableCell>
-                    <TableCell>{loan.request.requester}</TableCell>
-                    <TableCell>{utils.formatEther(loan.request.principal)}</TableCell>
-                    <TableCell>{utils.formatEther(loan.request.repayment)}</TableCell>
-                    <TableCell>{utils.formatEther(loan.request.duration)}</TableCell>
-                    <TableCell>{utils.formatEther(loan.request.validUntil)}</TableCell>
-                    {/* <TableCell>
-                        <img onClick={() => this.props.onTriggerCreateEditBountiFlow(bounti.id)} src={process.env.PUBLIC_URL + '/assets/icon/edit.svg'}/>
-                    </TableCell> */}
-                </TableRow>
-            );
-        });
+export default function OpenLoanList({ goToHomeView, fundLoad, openLoans }) {
 
+    const rows = openLoans.map(loan => {
         return (
-            <div className="OpenLoanList__container">
+            <TableRow key={loan.id}>
+                <TableCell>{loan.id}</TableCell>
+                <TableCell>{loan.request.requester}</TableCell>
+                <TableCell>{utils.formatEther(loan.request.principal)}</TableCell>
+                <TableCell>{utils.formatEther(loan.request.repayment)}</TableCell>
+                <TableCell>{utils.formatEther(loan.request.duration)}</TableCell>
+                <TableCell>{utils.formatEther(loan.request.validUntil)}</TableCell>
+                <TableCell>
+                    <PaymentIcon onClick={() => fundLoad(loan.id)} />
+                </TableCell>
+                {/* <TableCell>
+                    <img onClick={() => this.props.onTriggerCreateEditBountiFlow(bounti.id)} src={process.env.PUBLIC_URL + '/assets/icon/edit.svg'}/>
+                </TableCell> */}
+            </TableRow>
+        );
+    });
+
+    return (
+        <>
+            <Button variant="outlined" color="primary" onClick={goToHomeView}>Home</Button>
+            <div className="Table__container">
                 <TableContainer>
                     <Table className="TablePage__table" aria-label="simple table">
                         <TableHead>
@@ -47,6 +50,7 @@ export default class OpenLoanList extends React.PureComponent {
                                 <TableCell>Repayment</TableCell>
                                 <TableCell>Duration</TableCell>
                                 <TableCell>ValidUntil</TableCell>
+                                <TableCell></TableCell>
                             </TableRow>
                         </TableHead>
 
@@ -56,10 +60,6 @@ export default class OpenLoanList extends React.PureComponent {
                     </Table>
                 </TableContainer>
             </div>
-        );
-    }
+        </>
+    );
 }
-
-OpenLoanList.propTypes = {
-    openLoans: PropTypes.array.isRequired,
-};
