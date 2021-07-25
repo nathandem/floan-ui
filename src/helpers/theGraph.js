@@ -2,8 +2,6 @@ import axios from 'axios';
 
 
 export const getLoans = async () => {
-    // https://docs.ethers.io/v5/single-page/#/v5/getting-started/-%23-getting-started--history
-
     const query = `{
         loans {
           id
@@ -18,12 +16,28 @@ export const getLoans = async () => {
             repayment
             duration
           }
+          provision {
+                id
+                timestamp
+          }
           state
         }
       }`;
-    const loans = await axios.post('https://api.thegraph.com/subgraphs/name/kronael/floan', { query });
+    const data = await axios.post('https://api.thegraph.com/subgraphs/name/kronael/floan', { query });
 
-    return loans.data.data.loans;
+    const loans = data.data.data.loans;
+
+    for(const loan of loans){
+        if(loan.provision){
+            loan.expires = loan.provision.timestamp + Number(loan.request.duration);
+            loan.is_expired = (loan.expires < Date.now() / 1000) && (loan.state == 'PROVIDED' || loan.state != 'DRAWN')
+        }else{
+            loan.expires = null
+            loan.is_expired = false
+        }
+    }
+
+    return loans;
 };
 
 export const getRequesterInfo = async (requesterId) => {
@@ -33,7 +47,17 @@ export const getRequesterInfo = async (requesterId) => {
         amountRepayed
         amountRequested
       }}`;
-    const requesterInfo = await axios.post('https://api.thegraph.com/subgraphs/name/kronael/floan', { query });
+    const data = await axios.post('https://api.thegraph.com/subgraphs/name/kronael/floan', { query });
 
-    return requesterInfo.data.data.requester;
+    const info = data.data.data.requester;
+    info.amountOverdue = 0;
+
+    const loans = await getLoans();
+
+    for(const loan of loans)
+        if(loan.request.requester.id == requesterId)
+            if(loan.is_expired)
+                info.amountOverdue += loan.request.repayment;
+
+    return info;
 };
