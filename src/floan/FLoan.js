@@ -6,16 +6,18 @@ import floanAbi from '../abis/floan.json';
 import erc20Abi from '../abis/erc20.json';
 
 import CreateLoan from './CreateLoan';
-import OpenLoanList from './OpenLoanList';
 import Home from './Home';
+import OpenLoanList from './OpenLoanList';
+import RequesterInfo from './RequesterInfo';
 
-import { getLoans } from '../helpers/theGraph';
+import { getLoans, getRequesterInfo } from '../helpers/theGraph';
 
 
 const VIEWS = {
     HOME: 'home',
     CREATE_LOAN: 'create_loan',
     LIST_LOANS: 'list_loans',
+    REQUESTER_INFO: 'requester_info',
 };
 
 export default class FLoan extends React.PureComponent {
@@ -25,6 +27,7 @@ export default class FLoan extends React.PureComponent {
         daiContract: null,  // ethers.js Contract entity for dai
         activeView: VIEWS.HOME,
         loans: [],
+        requesterInfo: null,
     };
 
     componentDidMount = async () => {
@@ -47,6 +50,12 @@ export default class FLoan extends React.PureComponent {
         const loans = await getLoans();
         console.log(loans);
         this.setState({ activeView: VIEWS.LIST_LOANS, loans });
+    }
+
+    goToRequesterInfoView = async (requesterId) => {
+        const requesterInfo = await getRequesterInfo(requesterId);
+        console.log(requesterInfo);
+        this.setState({ activeView: VIEWS.REQUESTER_INFO, requesterInfo });
     }
 
     goToHomeView = () => {
@@ -93,6 +102,12 @@ export default class FLoan extends React.PureComponent {
                 goToHomeView={this.goToHomeView}
                 openLoans={this.state.loans.filter(loan => loan.state === 'OPEN')}
                 fundLoad={this.fundLoad}
+                goToRequesterInfoView={this.goToRequesterInfoView}
+            />;
+        } else if (this.state.activeView === VIEWS.REQUESTER_INFO) {
+            activeView = <RequesterInfo
+                goToHomeView={this.goToHomeView}
+                requesterInfo={this.state.requesterInfo}
             />;
         }
 

@@ -25,3 +25,15 @@ export const getLoans = async () => {
 
     return loans.data.data.loans;
 };
+
+export const getRequesterInfo = async (requesterId) => {
+    const query = `{requester(id: "${requesterId}") {
+        id
+        amountOutstanding
+        amountRepayed
+        amountRequested
+      }}`;
+    const requesterInfo = await axios.post('https://api.thegraph.com/subgraphs/name/kronael/floan', { query });
+
+    return requesterInfo.data.data.requester;
+};
