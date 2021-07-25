@@ -12,7 +12,7 @@ export default class App extends React.PureComponent {
     state = {
         provider: null,
         signer: null,
-        signedAddress: null,
+        signerAddress: null,
     };
 
     componentDidMount = async () => {
@@ -20,8 +20,8 @@ export default class App extends React.PureComponent {
         this.setState({ provider }, async () => {
             if (await this._isMetaMaskAccountConnected()) {
                 const signer = this.state.provider.getSigner();
-                const signedAddress = await signer.getAddress();
-                this.setState({ signedAddress, signer });
+                const signerAddress = await signer.getAddress();
+                this.setState({ signerAddress, signer });
             }
         });
 
@@ -41,9 +41,9 @@ export default class App extends React.PureComponent {
         // Command to prompt the user to connect his account with metamask
         await this.state.provider.send("eth_requestAccounts", []);
         const signer = this.state.provider.getSigner();
-        const signedAddress = await signer.getAddress();
+        const signerAddress = await signer.getAddress();
 
-        this.setState({ signedAddress, signer });
+        this.setState({ signerAddress, signer });
     }
 
     render() {

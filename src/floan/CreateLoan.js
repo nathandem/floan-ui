@@ -28,6 +28,7 @@ export default class CreateLoan extends React.PureComponent {
         return (
             <div className="CreateLoan__container">
                 <div>
+                    <Button variant="outlined" color="primary" onClick={this.props.goToHomeView}>Home</Button>
                     <h2 className="CreateLoan__title">Create loan offer</h2>
                     <div className="CreateLoan__input">
                         <TextField

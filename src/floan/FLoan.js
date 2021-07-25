@@ -9,6 +9,7 @@ import CreateLoan from './CreateLoan';
 import Home from './Home';
 import OpenLoanList from './OpenLoanList';
 import RequesterInfo from './RequesterInfo';
+import RequesterLoanList from './RequesterLoanList';
 
 import { getLoans, getRequesterInfo } from '../helpers/theGraph';
 
@@ -18,6 +19,7 @@ const VIEWS = {
     CREATE_LOAN: 'create_loan',
     LIST_LOANS: 'list_loans',
     REQUESTER_INFO: 'requester_info',
+    REQUESTER_OPEN_LOANS_VIEW: 'requester_open_loans_view',
 };
 
 export default class FLoan extends React.PureComponent {
@@ -58,6 +60,12 @@ export default class FLoan extends React.PureComponent {
         this.setState({ activeView: VIEWS.REQUESTER_INFO, requesterInfo });
     }
 
+    goToRequesterOpenLoansView = async () => {
+        const loans = await getLoans();
+        console.log(loans);
+        this.setState({ activeView: VIEWS.REQUESTER_OPEN_LOANS_VIEW, loans });
+    }
+
     goToHomeView = () => {
         this.setState({ activeView: VIEWS.HOME });
     }
@@ -72,7 +80,7 @@ export default class FLoan extends React.PureComponent {
         this.goToHomeView();
     }
 
-    fundLoad = async (loanId) => {
+    fundLoan = async (loanId) => {
         // TODO: fix `getCredit` call
         // const loadPrincipal = await this.state.floanContract.getCredit(loanId).principal;
         const loadPrincipal = ethers.utils.parseEther('1000');
@@ -84,13 +92,18 @@ export default class FLoan extends React.PureComponent {
         console.log(w);
     }
 
+    paybackLoan = async (loanId) => {
+        console.log(await this.state.floanContract.paybackLoan(loanId));
+    }
+
     render() {
         let activeView;
         if (this.state.activeView === VIEWS.HOME) {
             activeView = <Home
                 goToCreateLoanView={this.goToCreateLoanView}
                 goToListLoansView={this.goToListLoansView}
-                signedAddress={this.props.signedAddress}
+                goToRequesterOpenLoansView={this.goToRequesterOpenLoansView}
+                signerAddress={this.props.signerAddress}
             />;
         } else if (this.state.activeView === VIEWS.CREATE_LOAN) {
             activeView = <CreateLoan
@@ -101,13 +114,23 @@ export default class FLoan extends React.PureComponent {
             activeView = <OpenLoanList
                 goToHomeView={this.goToHomeView}
                 openLoans={this.state.loans.filter(loan => loan.state === 'OPEN')}
-                fundLoad={this.fundLoad}
+                fundLoan={this.fundLoan}
                 goToRequesterInfoView={this.goToRequesterInfoView}
             />;
         } else if (this.state.activeView === VIEWS.REQUESTER_INFO) {
             activeView = <RequesterInfo
                 goToHomeView={this.goToHomeView}
                 requesterInfo={this.state.requesterInfo}
+            />;
+        } else if (this.state.activeView === VIEWS.REQUESTER_OPEN_LOANS_VIEW) {
+            const loans = this.state.loans.filter(loan => {
+                return loan.request.requester.id.toLowerCase() === this.props.signerAddress.toLowerCase();
+            });
+
+            activeView = <RequesterLoanList
+                goToHomeView={this.goToHomeView}
+                requesterLoans={loans}
+                paybackLoan={this.paybackLoan}
             />;
         }
 
@@ -122,5 +145,5 @@ export default class FLoan extends React.PureComponent {
 FLoan.propTypes = {
     provider: PropTypes.object.isRequired,
     signer: PropTypes.object.isRequired,
-    signedAddress: PropTypes.string.isRequired,
+    signerAddress: PropTypes.string.isRequired,
 };
