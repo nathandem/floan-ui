@@ -8,7 +8,7 @@ export default function Landing({ connectWallet }) {
         <div className="Landing__container">
             <div>
                 <section>
-                    <h1>fLoan: uncolleteralized loans made a reality</h1>
+                    <h1>fLoan: uncolleteralized loans made real</h1>
                 </section>
                 <div className="Landing__connectButton">
                     <div><button onClick={connectWallet}>Connect wallet</button></div>

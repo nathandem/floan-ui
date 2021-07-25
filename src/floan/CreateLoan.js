@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { utils } from "ethers";
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -16,8 +17,8 @@ export default class CreateLoan extends React.PureComponent {
     };
 
     prepCreateLoanOffer = () => {
-        const principal = parseInt(this.state.principal, 10);
-        const repayment = parseInt(this.state.repayment, 10);
+        const principal = utils.parseEther(this.state.principal);
+        const repayment = utils.parseEther(this.state.repayment);
         const duration = parseInt(this.state.duration, 10) * 24 * 60 * 60;
 
         this.props.createLoanOffer(principal, repayment, duration);

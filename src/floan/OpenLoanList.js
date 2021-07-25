@@ -21,11 +21,10 @@ export default function OpenLoanList({ goToHomeView, fundLoad, openLoans }) {
         return (
             <TableRow key={loan.id}>
                 <TableCell>{loan.id}</TableCell>
-                <TableCell>{loan.request.requester}</TableCell>
+                <TableCell>{loan.request.requester.id}</TableCell>
                 <TableCell>{utils.formatEther(loan.request.principal)}</TableCell>
                 <TableCell>{utils.formatEther(loan.request.repayment)}</TableCell>
                 <TableCell>{utils.formatEther(loan.request.duration)}</TableCell>
-                <TableCell>{utils.formatEther(loan.request.validUntil)}</TableCell>
                 <TableCell>
                     <PaymentIcon onClick={() => fundLoad(loan.id)} />
                 </TableCell>
@@ -49,7 +48,6 @@ export default function OpenLoanList({ goToHomeView, fundLoad, openLoans }) {
                                 <TableCell>Principal</TableCell>
                                 <TableCell>Repayment</TableCell>
                                 <TableCell>Duration</TableCell>
-                                <TableCell>ValidUntil</TableCell>
                                 <TableCell></TableCell>
                             </TableRow>
                         </TableHead>

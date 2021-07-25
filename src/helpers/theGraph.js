@@ -8,11 +8,15 @@ export const getLoans = async () => {
         loans {
           id
           request {
-            requester
+            requester {
+                id
+                amountOutstanding
+                amountRequested
+                amountRepayed
+            }
             principal
             repayment
             duration
-            validUntil
           }
           state
         }

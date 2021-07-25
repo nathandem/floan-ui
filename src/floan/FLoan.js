@@ -45,6 +45,7 @@ export default class FLoan extends React.PureComponent {
 
     goToListLoansView = async () => {
         const loans = await getLoans();
+        console.log(loans);
         this.setState({ activeView: VIEWS.LIST_LOANS, loans });
     }
 
