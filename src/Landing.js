@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Button from '@material-ui/core/Button';
+
 import './Landing.css';
 
 
@@ -11,7 +13,7 @@ export default function Landing({ connectWallet }) {
                     <h1>fLoan: uncolleteralized loans made real</h1>
                 </section>
                 <div className="Landing__connectButton">
-                    <div><button onClick={connectWallet}>Connect wallet</button></div>
+                    <Button variant="outlined" onClick={connectWallet}>Connect wallet</Button>
                 </div>
             </div>
         </div>
