@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/floan-ui/static/css/main.00e3cbc8.chunk.css",
+    "main.js": "/floan-ui/static/js/main.aea1cafe.chunk.js",
+    "main.js.map": "/floan-ui/static/js/main.aea1cafe.chunk.js.map",
+    "runtime-main.js": "/floan-ui/static/js/runtime-main.ee547f34.js",
+    "runtime-main.js.map": "/floan-ui/static/js/runtime-main.ee547f34.js.map",
+    "static/js/2.0bbe613c.chunk.js": "/floan-ui/static/js/2.0bbe613c.chunk.js",
+    "static/js/2.0bbe613c.chunk.js.map": "/floan-ui/static/js/2.0bbe613c.chunk.js.map",
+    "index.html": "/floan-ui/index.html",
+    "static/css/main.00e3cbc8.chunk.css.map": "/floan-ui/static/css/main.00e3cbc8.chunk.css.map",
+    "static/js/2.0bbe613c.chunk.js.LICENSE.txt": "/floan-ui/static/js/2.0bbe613c.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.ee547f34.js",
+    "static/js/2.0bbe613c.chunk.js",
+    "static/css/main.00e3cbc8.chunk.css",
+    "static/js/main.aea1cafe.chunk.js"
+  ]
+}
