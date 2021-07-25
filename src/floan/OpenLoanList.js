@@ -20,8 +20,9 @@ export default function OpenLoanList({
   openLoans,
 }) {
   const rows = openLoans.map((loan) => {
-    const floatToFixed = (number) => {
-      return parseFloat(number.toString()).toFixed(2);
+    const etherToFixed = (number) => {
+      const formatted = utils.formatEther(number);
+      return parseFloat(formatted.toString()).toFixed(2);
     };
     const formatDays = (seconds) => {
       const days = parseInt(seconds, 10) / 60 / 60 / 24;
@@ -39,12 +40,8 @@ export default function OpenLoanList({
             {loan.request.requester.id}
           </a>
         </TableCell>
-        <TableCell>
-          {floatToFixed(utils.formatEther(loan.request.principal))}
-        </TableCell>
-        <TableCell>
-          {floatToFixed(utils.formatEther(loan.request.repayment))}
-        </TableCell>
+        <TableCell>{etherToFixed(loan.request.principal)}</TableCell>
+        <TableCell>{etherToFixed(loan.request.repayment)}</TableCell>
         <TableCell>{formatDays(loan.request.duration)}</TableCell>
         <TableCell>
           <PaymentIcon onClick={() => fundLoad(loan.id)} />
