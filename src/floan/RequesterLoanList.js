@@ -14,7 +14,7 @@ import PaymentIcon from '@material-ui/icons/Payment';
 import './Table.css';
 
 
-export default function RequesterLoanList({ goToHomeView, paybackLoan, requesterLoans }) {
+export default function RequesterLoanList({ action, goToHomeView, requesterLoans, title }) {
 
     const rows = requesterLoans.map(loan => {
         return (
@@ -24,7 +24,7 @@ export default function RequesterLoanList({ goToHomeView, paybackLoan, requester
                 <TableCell>{utils.formatEther(loan.request.repayment)}</TableCell>
                 <TableCell>{utils.formatEther(loan.request.duration)}</TableCell>
                 <TableCell>
-                    <PaymentIcon onClick={() => paybackLoan(loan.id)} />
+                    <PaymentIcon onClick={() => action(loan.id)} />
                 </TableCell>
             </TableRow>
         );
@@ -33,6 +33,7 @@ export default function RequesterLoanList({ goToHomeView, paybackLoan, requester
     return (
         <>
             <Button variant="outlined" color="primary" onClick={goToHomeView}>Home</Button>
+            <h1>{title}</h1>
             <div className="Table__container">
                 <TableContainer>
                     <Table className="TablePage__table" aria-label="simple table">

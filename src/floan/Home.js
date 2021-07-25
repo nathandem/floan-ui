@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import './Home.css';
 
 
-export default function Home({ signerAddress, goToCreateLoanView, goToListLoansView, goToRequesterOpenLoansView }) {
+export default function Home({ signerAddress, goToCreateLoanView, goToListLoansView, goToRequesterProvidedLoansView, goToRequesterDrawnLoansView }) {
     return (
         <div className="Home__container">
             <div>
@@ -14,7 +14,8 @@ export default function Home({ signerAddress, goToCreateLoanView, goToListLoansV
 
                 <div className="Home__button"><Button variant="outlined" onClick={goToCreateLoanView}>Create loan request</Button></div>
                 <div className="Home__button"><Button variant="outlined" onClick={goToListLoansView}>View open loans</Button></div>
-                <div className="Home__button"><Button variant="outlined" onClick={goToRequesterOpenLoansView}>Pay your loans</Button></div>
+                <div className="Home__button"><Button variant="outlined" onClick={goToRequesterProvidedLoansView}>Draw funds from provided loans</Button></div>
+                <div className="Home__button"><Button variant="outlined" onClick={goToRequesterDrawnLoansView}>Pay back your loans</Button></div>
             </div>
         </div>
     );

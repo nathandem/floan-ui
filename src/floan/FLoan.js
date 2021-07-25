@@ -19,7 +19,8 @@ const VIEWS = {
     CREATE_LOAN: 'create_loan',
     LIST_LOANS: 'list_loans',
     REQUESTER_INFO: 'requester_info',
-    REQUESTER_OPEN_LOANS_VIEW: 'requester_open_loans_view',
+    REQUESTER_PROVIDED_LOANS_VIEW: 'requester_provided_loans_view',
+    REQUESTER_DRAWN_LOANS_VIEW: 'requester_drawn_loans_view',
 };
 
 export default class FLoan extends React.PureComponent {
@@ -60,10 +61,16 @@ export default class FLoan extends React.PureComponent {
         this.setState({ activeView: VIEWS.REQUESTER_INFO, requesterInfo });
     }
 
-    goToRequesterOpenLoansView = async () => {
+    goToRequesterProvidedLoansView = async () => {
         const loans = await getLoans();
         console.log(loans);
-        this.setState({ activeView: VIEWS.REQUESTER_OPEN_LOANS_VIEW, loans });
+        this.setState({ activeView: VIEWS.REQUESTER_PROVIDED_LOANS_VIEW, loans });
+    }
+
+    goToRequesterDrawnLoansView = async () => {
+        const loans = await getLoans();
+        console.log(loans);
+        this.setState({ activeView: VIEWS.REQUESTER_DRAWN_LOANS_VIEW, loans });
     }
 
     goToHomeView = () => {
@@ -95,11 +102,18 @@ export default class FLoan extends React.PureComponent {
         this.goToListLoansView();
     }
 
+    drawLoan = async (loanId) => {
+        console.log(await this.state.floanContract.drawLoan(loanId));
+
+        alert(`You received the funds from the load: ${loanId}`);
+        this.goToRequesterProvidedLoansView();
+    }
+
     paybackLoan = async (loanId) => {
         console.log(await this.state.floanContract.paybackLoan(loanId));
 
         alert(`You successfully payed back loan: ${loanId}`);
-        this.goToRequesterOpenLoansView();
+        this.goToRequesterDrawnLoansView();
     }
 
     render() {
@@ -108,7 +122,8 @@ export default class FLoan extends React.PureComponent {
             activeView = <Home
                 goToCreateLoanView={this.goToCreateLoanView}
                 goToListLoansView={this.goToListLoansView}
-                goToRequesterOpenLoansView={this.goToRequesterOpenLoansView}
+                goToRequesterProvidedLoansView={this.goToRequesterProvidedLoansView}
+                goToRequesterDrawnLoansView={this.goToRequesterDrawnLoansView}
                 signerAddress={this.props.signerAddress}
             />;
         } else if (this.state.activeView === VIEWS.CREATE_LOAN) {
@@ -128,15 +143,29 @@ export default class FLoan extends React.PureComponent {
                 goToHomeView={this.goToHomeView}
                 requesterInfo={this.state.requesterInfo}
             />;
-        } else if (this.state.activeView === VIEWS.REQUESTER_OPEN_LOANS_VIEW) {
-            const loans = this.state.loans.filter(loan => {
-                return loan.request.requester.id.toLowerCase() === this.props.signerAddress.toLowerCase();
-            });
+        } else if (this.state.activeView === VIEWS.REQUESTER_PROVIDED_LOANS_VIEW) {
+            const loans = this.state.loans.filter(loan => (
+                loan.request.requester.id.toLowerCase() === this.props.signerAddress.toLowerCase()
+                && loan.state === 'PROVIDED'
+            ));
 
             activeView = <RequesterLoanList
+                title={'Provided loans (funded loans, not withdrawn)'}
                 goToHomeView={this.goToHomeView}
                 requesterLoans={loans}
-                paybackLoan={this.paybackLoan}
+                action={this.drawLoan}
+            />;
+        } else if (this.state.activeView === VIEWS.REQUESTER_DRAWN_LOANS_VIEW) {
+            const loans = this.state.loans.filter(loan => (
+                loan.request.requester.id.toLowerCase() === this.props.signerAddress.toLowerCase()
+                && loan.state === 'DRAWN'
+            ));
+
+            activeView = <RequesterLoanList
+                title={'Reimburse loans'}
+                goToHomeView={this.goToHomeView}
+                requesterLoans={loans}
+                action={this.paybackLoan}
             />;
         }
 
