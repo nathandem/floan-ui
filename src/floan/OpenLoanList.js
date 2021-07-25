@@ -16,7 +16,7 @@ import "./Table.css";
 export default function OpenLoanList({
     goToHomeView,
     goToRequesterInfoView,
-    fundLoad,
+    fundLoan,
     openLoans,
 }) {
     const rows = openLoans.map((loan) => {
@@ -44,7 +44,7 @@ export default function OpenLoanList({
                 <TableCell>{etherToFixed(loan.request.repayment)}</TableCell>
                 <TableCell>{formatDays(loan.request.duration)}</TableCell>
                 <TableCell>
-                    <PaymentIcon onClick={() => fundLoad(loan.id)} />
+                    <PaymentIcon onClick={() => fundLoan(loan.id)} />
                 </TableCell>
             </TableRow>
         );
