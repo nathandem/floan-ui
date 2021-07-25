@@ -5,6 +5,11 @@
                 "internalType": "address",
                 "name": "_tokenAddress",
                 "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_pohAddress",
+                "type": "address"
             }
         ],
         "stateMutability": "nonpayable",
@@ -99,12 +104,6 @@
                 "internalType": "uint256",
                 "name": "duration",
                 "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "validUntil",
-                "type": "uint256"
             }
         ],
         "name": "LogRequestLoan",
@@ -113,6 +112,12 @@
     {
         "anonymous": false,
         "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "requestor",
+                "type": "address"
+            },
             {
                 "indexed": true,
                 "internalType": "uint256",
@@ -207,33 +212,31 @@
                     },
                     {
                         "internalType": "uint48",
-                        "name": "validUntil",
+                        "name": "startBlock",
                         "type": "uint48"
                     },
                     {
-                        "internalType": "bool",
-                        "name": "isFilled",
-                        "type": "bool"
-                    },
-                    {
-                        "internalType": "bool",
-                        "name": "isWithdrawn",
-                        "type": "bool"
-                    },
-                    {
-                        "internalType": "bool",
-                        "name": "isPayedBack",
-                        "type": "bool"
-                    },
-                    {
-                        "internalType": "bool",
-                        "name": "isClosed",
-                        "type": "bool"
+                        "internalType": "enum FloanTypes.State",
+                        "name": "state",
+                        "type": "uint8"
                     }
                 ],
                 "internalType": "struct FloanTypes.credit",
                 "name": "",
                 "type": "tuple"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getPOHAddress",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
             }
         ],
         "stateMutability": "view",
@@ -326,11 +329,6 @@
             {
                 "internalType": "uint256",
                 "name": "_duration",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_validUntil",
                 "type": "uint256"
             }
         ],
