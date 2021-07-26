@@ -30,7 +30,7 @@ export const getLoans = async () => {
     for(const loan of loans){
         if(loan.provision){
             loan.expires = loan.provision.timestamp + Number(loan.request.duration);
-            loan.is_expired = (loan.expires < Date.now() / 1000) && (loan.state == 'PROVIDED' || loan.state != 'DRAWN')
+            loan.is_expired = (loan.expires < Date.now() / 1000) && (loan.state === 'PROVIDED' || loan.state !== 'DRAWN')
         }else{
             loan.expires = null
             loan.is_expired = false
@@ -54,9 +54,9 @@ export const getRequesterInfo = async (requesterId) => {
 
     const loans = await getLoans();
 
-    for(const loan of loans)
-        if(loan.request.requester.id == requesterId)
-            if(loan.is_expired)
+    for (const loan of loans)
+        if (loan.request.requester.id === requesterId)
+            if (loan.is_expired)
                 info.amountOverdue += loan.request.repayment;
 
     return info;
