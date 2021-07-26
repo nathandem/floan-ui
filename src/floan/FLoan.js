@@ -40,7 +40,17 @@ export default class FLoan extends React.PureComponent {
         const daiAddress = await floanContract.getTokenAddress();
         const daiContract = new ethers.Contract(daiAddress, erc20Abi, this.props.signer);
 
+        floanContract.on('LogRequestLoan', (requester, loanID, principal, repayment, duration, event) => {
+            console.log(`LogRequestLoan event`);
+            console.log(event);
+        });
+
         this.setState({ daiContract, floanContract });
+    }
+
+    componentWillUnmount() {
+        // remove all listeners added on floanContract in `componentDidMount`
+        this.state.floanContract.removeAllListeners();
     }
 
     // change view
@@ -82,6 +92,10 @@ export default class FLoan extends React.PureComponent {
     createLoanOffer = async (principal, repayment, duration) => {
         const transaction = await this.state.floanContract.requestLoan(principal, repayment, duration);
         console.log(transaction);
+
+        // IF WE WANT TO WAIT THAT THE TRANSACTION GETS IN A BLOCK (CAN BE LONG)
+        // const receipt = await transaction.wait();
+        // console.log(receipt);
 
         alert('Loan properly created!');
         this.goToHomeView();
